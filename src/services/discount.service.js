@@ -35,12 +35,13 @@ class DiscountService {
       max_value,
       max_uses,
       uses_count,
+      users_used,
       max_uses_per_user,
     } = payload;
     //kiem tra tinh hop le data
-    if (new Date() < new Date(start_date) || new Date() > new Date(end_date)) {
-      throw new BadRequestError('Discount code has expired!');
-    }
+    // if (new Date() < new Date(start_date) || new Date() > new Date(end_date)) {
+    //   throw new BadRequestError('Discount code has expired!');
+    // }
     if (new Date(start_date) >= new Date(end_date)) {
       throw new BadRequestError('Start date must be before end_date');
     }
@@ -98,7 +99,7 @@ class DiscountService {
       shopId,
     });
 
-    if (!foundDiscount || foundDiscount.discount_is_active) {
+    if (!foundDiscount || !foundDiscount.discount_is_active) {
       throw new NotFoundError('Discount not exists!');
     }
     const { discount_applies_to, discount_product_ids } = foundDiscount;
@@ -158,20 +159,21 @@ class DiscountService {
       discount_max_uses,
       discount_start_date,
       discount_end_date,
+      discount_users_used,
       discount_min_order_value,
       discount_max_uses_per_user,
       discount_type,
       discount_value,
     } = foundDiscount;
     if (!discount_is_active) throw new NotFoundError(`discount expired!`);
-    if (discount_max_uses) throw new NotFoundError(`discount are out!`);
+    if (!discount_max_uses) throw new NotFoundError(`discount are out!`);
 
-    if (
-      new Date() < new Date(discount_start_date) ||
-      new Date() > new Date(discount_end_date)
-    ) {
-      throw new NotFoundError(`discount code has expired!`);
-    }
+    // if (
+    //   new Date() < new Date(discount_start_date) ||
+    //   new Date() > new Date(discount_end_date)
+    // ) {
+    //   throw new NotFoundError(`discount code has expired!`);
+    // }
 
     //check xem co set gia tri toi thieu hay k.
     let totalOrder = 0;
@@ -240,4 +242,4 @@ class DiscountService {
   }
 }
 
-module.exports = DiscountService 
+module.exports = DiscountService;

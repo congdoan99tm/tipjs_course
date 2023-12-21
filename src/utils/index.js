@@ -4,7 +4,7 @@ const _ = require('lodash');
 const { Types } = require('mongoose');
 const { BadRequestError } = require('../core/error.response');
 
-const convertToObjectIdMongoDb = (Id) => Types.ObjectId(Id);
+const convertToObjectIdMongoDb = (Id) => new Types.ObjectId(Id);
 
 const getInfoData = ({ fields = [], object = {} }) => {
   return _.pick(object, fields);

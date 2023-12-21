@@ -1,5 +1,9 @@
-const { discount } = require('../discount.model');
-const { unGetSelectData, getSelectData } = require(`../../utils`);
+const discount = require('../discount.model');
+const {
+  unGetSelectData,
+  getSelectData,
+  convertToObjectIdMongoDb,
+} = require(`../../utils`);
 
 const checkDiscountExist = async ({ code, shopId }) => {
   // const foundDiscount = await model.findOne(filter).lean();
