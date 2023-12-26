@@ -1,6 +1,6 @@
-'use strict';
-const crypto = require('crypto');
-const apikeyModel = require('../models/apikey.model');
+'use strict'
+const crypto = require('crypto')
+const apikeyModel = require('../models/apikey.model')
 
 const findById = async (key) => {
   // const newKey = await apikeyModel.create({
@@ -8,8 +8,8 @@ const findById = async (key) => {
   //   permissions: ["0000"],
   // });
   // console.log(newKey);
-  const objKey = await apikeyModel.findOne({ key, status: true }).lean();
-  return objKey;
-};
+  const objKey = await apikeyModel.findOne({ key, status: true }).lean()
+  return objKey
+}
 
-module.exports = { findById };
+module.exports = { findById }
