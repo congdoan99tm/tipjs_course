@@ -1,9 +1,9 @@
-'use strict'
+'use strict';
 
-const { model, Schema } = require('mongoose') // Erase if already required
+const { model, Schema } = require('mongoose'); // Erase if already required
 
-const DOCUMENT_NAME = 'Cart'
-const COLLECTION_NAME = 'Carts'
+const DOCUMENT_NAME = 'Cart';
+const COLLECTION_NAME = 'Carts';
 // Declare the Schema of the Mongo model
 var cartSchema = new Schema(
   {
@@ -29,10 +29,13 @@ var cartSchema = new Schema(
     cart_userId: { type: Number, required: true },
   },
   {
-    timestamps: true,
+    timestamps: {
+      createdAt: 'createOn',
+      updatedAt: 'modifiedOn',
+    },
     collection: COLLECTION_NAME,
   }
-)
+);
 
 //Export the model
-module.exports = model(DOCUMENT_NAME, cartSchema)
+module.exports = model(DOCUMENT_NAME, cartSchema);
