@@ -6,7 +6,7 @@ const KeyTokenService = require('./keyToken.service');
 const { createTokenPair, verifyJWT } = require('../auth/authUtils');
 const { getInfoData } = require('../utils/index');
 const {
-  BadRequestResponseError,
+  BadRequestError,
   ConflictResponseError,
   ForbiddenError,
   AuthFailureError,
@@ -113,10 +113,10 @@ class AccessService {
   static login = async ({ email, password, refreshToken = null }) => {
     //1. check Email
     const foundShop = await findByEmail({ email });
-    if (!foundShop) throw new BadRequestResponseError('Shop not registered!');
+    if (!foundShop) throw new BadRequestError('Shop not registered!');
     //2. check pass
     const match = bcrypt.compare(password, foundShop.password);
-    if (!match) throw new BadRequestResponseError('Authentication error');
+    if (!match) throw new BadRequestError('Authentication error');
     //3. create keys
     const publicKey = crypto.randomBytes(64).toString('hex');
     const privateKey = crypto.randomBytes(64).toString('hex');
@@ -149,7 +149,7 @@ class AccessService {
     // step1: check email exists???
     const holderShop = await shopModel.findOne({ email }).lean();
     if (holderShop) {
-      throw new BadRequestResponseError('Error: Shop already register');
+      throw new BadRequestError('Error: Shop already register');
     }
     const passwordHash = await bcrypt.hash(password, 1);
 
@@ -169,7 +169,7 @@ class AccessService {
         privateKey,
       });
       if (!keyStore) {
-        throw new BadRequestResponseError('Error: PublicKey error');
+        throw new BadRequestError('Error: PublicKey error');
       }
 
       const tokens = await createTokenPair(

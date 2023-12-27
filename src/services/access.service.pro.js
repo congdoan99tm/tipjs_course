@@ -6,7 +6,7 @@ const KeyTokenService = require('./keyToken.service');
 const { createTokenPairPro } = require('../auth/authUtils.pro');
 const { getInfoData } = require('../utils/index');
 const {
-  BadRequestResponseError,
+  BadRequestError,
   ConflictResponseError,
 } = require('../core/error.response');
 
@@ -17,7 +17,7 @@ class AccessServicePro {
     // step1: check email exists???
     const holderShop = await shopModel.findOne({ email }).lean();
     if (holderShop) {
-      throw new BadRequestResponseError('Error: Shop already register');
+      throw new BadRequestError('Error: Shop already register');
     }
     const passwordHash = await bcrypt.hash(password, 1);
 
@@ -45,7 +45,7 @@ class AccessServicePro {
         publicKey,
       });
       if (!publicKeyString) {
-        throw new BadRequestResponseError('Error: PublicKey error');
+        throw new BadRequestError('Error: PublicKey error');
       }
 
       console.log(`publicKeyString::`, publicKeyString);

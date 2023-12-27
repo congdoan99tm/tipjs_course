@@ -10,8 +10,9 @@ const { Types } = require('mongoose')
 const {
   getSelectData,
   unGetSelectData,
-  convertToObjectIdMongoDb,
+  convertToObjectIdMongodb,
 } = require('../../utils/index')
+const { BadRequestError } = require('../../core/error.response')
 const findAllDraftForShop = async ({ query, limit, skip }) => {
   return await queryProduct({ query, limit, skip })
 }
@@ -35,27 +36,30 @@ const searchProductByUser = async ({ keySearch }) => {
 }
 
 const publishProductByShop = async ({ product_shop, product_id }) => {
-  const foundShop = await product.findOne({
+  const foundProduct = await product.findOne({
     product_shop: new Types.ObjectId(product_shop),
     _id: new Types.ObjectId(product_id),
   })
-  if (!foundShop) return null
-  foundShop.isDraft = false
-  foundShop.isPublished = true
-  const { modifiedCount } = await foundShop.updateOne(foundShop)
-  return modifiedCount
+  if (!foundProduct) throw new BadRequestError('Product not Found')
+  foundProduct.isDraft = false
+  foundProduct.isPublished = true
+  const { modifiedCount } = await foundProduct.updateOne(foundProduct)
+  if (modifiedCount != 1) throw new BadRequestError('Fail to Publish')
+
+  return foundProduct
 }
 
 const unPublishProductByShop = async ({ product_shop, product_id }) => {
-  const foundShop = await product.findOne({
+  const foundProduct = await product.findOne({
     product_shop: new Types.ObjectId(product_shop),
     _id: new Types.ObjectId(product_id),
   })
-  if (!foundShop) return null
-  foundShop.isDraft = true
-  foundShop.isPublished = false
-  const { modifiedCount } = await foundShop.updateOne(foundShop)
-  return modifiedCount
+  if (!foundProduct) throw new BadRequestError('Product not Found')
+  foundProduct.isDraft = true
+  foundProduct.isPublished = false
+  const { modifiedCount } = await foundProduct.updateOne(foundProduct)
+  if (modifiedCount != 1) throw new BadRequestError('Fail to UnPublish')
+  return foundProduct
 }
 
 const findAllProducts = async ({ limit, sort, page, filter, select }) => {
@@ -106,8 +110,22 @@ const queryProduct = async ({ query, limit, skip }) => {
 
 const getProductById = async (productId) => {
   return await product
-    .findOne({ _id: convertToObjectIdMongoDb(productId) })
+    .findOne({ _id: convertToObjectIdMongodb(productId) })
     .lean()
+}
+const checkProductByServer = async (products) => {
+  return await Promise.all(
+    products.map(async (product) => {
+      const foundProduct = await getProductById(product.productId)
+      if (foundProduct) {
+        return {
+          price: foundProduct.product_price,
+          quantity: product.quantity,
+          productId: product.productId,
+        }
+      }
+    })
+  )
 }
 
 module.exports = {
@@ -120,4 +138,5 @@ module.exports = {
   findProduct,
   updateProductById,
   getProductById,
+  checkProductByServer,
 }

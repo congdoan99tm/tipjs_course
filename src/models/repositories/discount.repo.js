@@ -1,21 +1,21 @@
-const discount = require('../discount.model');
+const discount = require('../discount.model')
 const {
   unGetSelectData,
   getSelectData,
-  convertToObjectIdMongoDb,
-} = require(`../../utils`);
+  convertToObjectIdMongodb,
+} = require(`../../utils`)
 
 const checkDiscountExist = async ({ code, shopId }) => {
   // const foundDiscount = await model.findOne(filter).lean();
   const foundDiscount = await discount
     .findOne({
       discount_code: code,
-      discount_shopId: convertToObjectIdMongoDb(shopId),
+      discount_shopId: convertToObjectIdMongodb(shopId),
     })
-    .lean();
+    .lean()
 
-  return foundDiscount;
-};
+  return foundDiscount
+}
 
 const findAllDiscountCodesUnselect = async ({
   limit = 50,
@@ -25,17 +25,17 @@ const findAllDiscountCodesUnselect = async ({
   unSelect,
   model,
 }) => {
-  const skip = (page - 1) * limit;
-  const sortBy = sort === 'ctime' ? { _id: -1 } : { _id: 1 };
+  const skip = (page - 1) * limit
+  const sortBy = sort === 'ctime' ? { _id: -1 } : { _id: 1 }
   const documents = await model
     .find(filter)
     .sort(sortBy)
     .skip(skip)
     .limit(limit)
     .select(unGetSelectData(unSelect))
-    .lean();
-  return documents;
-};
+    .lean()
+  return documents
+}
 
 const findAllDiscountCodesSelect = async ({
   limit = 50,
@@ -45,20 +45,20 @@ const findAllDiscountCodesSelect = async ({
   unSelect,
   model,
 }) => {
-  const skip = (page - 1) * limit;
-  const sortBy = sort === 'ctime' ? { _id: -1 } : { _id: 1 };
+  const skip = (page - 1) * limit
+  const sortBy = sort === 'ctime' ? { _id: -1 } : { _id: 1 }
   const documents = await model
     .find(filter)
     .sort(sortBy)
     .skip(skip)
     .limit(limit)
     .select(getSelectData(unSelect))
-    .lean();
-  return documents;
-};
+    .lean()
+  return documents
+}
 
 module.exports = {
   checkDiscountExist,
   findAllDiscountCodesUnselect,
   findAllDiscountCodesSelect,
-};
+}
