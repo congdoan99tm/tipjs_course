@@ -1,8 +1,8 @@
-'use strict';
-const cart = require('../models/cart.model');
-const { BadRequestError, NotFoundError } = require('../core/error.response');
-const { options } = require('../routes');
-const { getProductById } = require('../models/repositories/product.repo');
+'use strict'
+const cart = require('../models/cart.model')
+const { BadRequestError, NotFoundError } = require('../core/error.response')
+const { options } = require('../routes')
+const { getProductById } = require('../models/repositories/product.repo')
 
 /*
   Key features: Cart Service
@@ -25,11 +25,11 @@ class CartService {
       options = {
         upsert: true,
         new: true,
-      };
-    return await cart.findOneAndUpdate(query, updateOrInsert, options);
+      }
+    return await cart.findOneAndUpdate(query, updateOrInsert, options)
   }
   static async updateUserCartQuantity({ userId, product }) {
-    const { productId, quantity } = product;
+    const { productId, quantity } = product
     const query = {
         cart_userId: userId,
         'cart_products.productId': productId,
@@ -43,26 +43,35 @@ class CartService {
       options = {
         upsert: true,
         new: true,
-      };
-    return await cart.findOneAndUpdate(query, updateSet, options);
+      }
+    return await cart.findOneAndUpdate(query, updateSet, options)
   }
   ///  END REPO CART ////
   static async addToCart({ userId, product = {} }) {
     // check cart ton tai hay khong?
-    const userCart = await cart.findOne({ cart_userId: userId });
+    const userCart = await cart.findOne({ cart_userId: userId })
     if (!userCart) {
       // create cart for User
 
-      return await CartService.createUserCart({ userId, product });
+      return await CartService.createUserCart({ userId, product })
     }
     //  neu co gio hang roi nhung chua co san pham
     if (!userCart.cart_products.length) {
-      userCart.cart_products = [product];
-      return await userCart.save();
+      userCart.cart_products = [product]
+      return await userCart.save()
+    } else {
+      //  neu co gio hang roi nhung chua co san pham nay trong list
+      const isObjectExists = userCart.cart_products.find(
+        (item) => item.productId === product.productId
+      )
+      if (!isObjectExists) {
+        userCart.cart_products.push(product)
+        return await userCart.save()
+      }
     }
 
     // gio hang ton tai, va co san pham nay thi update quantity
-    return await CartService.updateUserCartQuantity({ userId, product });
+    return await CartService.updateUserCartQuantity({ userId, product })
   }
   // update
   /*
@@ -82,13 +91,14 @@ class CartService {
 
     */
   static async addToCartV2({ userId, shop_order_ids }) {
-    const { productId, quantity, old_quantity } = shop_order_ids[0]?.item_products[0];
+    const { productId, quantity, old_quantity } =
+      shop_order_ids[0]?.item_products[0]
     // check product
-    const foundProduct = await getProductById(productId);
-    if (!foundProduct) throw new NotFoundError('Product not exists!');
+    const foundProduct = await getProductById(productId)
+    if (!foundProduct) throw new NotFoundError('Product not exists!')
     // compare
     if (foundProduct.product_shop.toString() !== shop_order_ids[0]?.shopId) {
-      throw new NotFoundError('Product do not belong to the shop');
+      throw new NotFoundError('Product do not belong to the shop')
     }
 
     if (quantity === 0) {
@@ -98,7 +108,7 @@ class CartService {
     return await CartService.updateUserCartQuantity({
       userId,
       product: { productId, quantity: quantity - old_quantity },
-    });
+    })
   }
 
   static async deleteUserCart({ userId, productId }) {
@@ -109,9 +119,9 @@ class CartService {
             productId,
           },
         },
-      };
-    const deleteCart = await cart.updateOne(query, updateSet);
-    return deleteCart;
+      }
+    const deleteCart = await cart.updateOne(query, updateSet)
+    return deleteCart
   }
 
   static async getListUserCart({ userId }) {
@@ -119,8 +129,8 @@ class CartService {
       .findOne({
         cart_userId: +userId,
       })
-      .lean();
+      .lean()
   }
 }
 
-module.exports = CartService;
+module.exports = CartService
