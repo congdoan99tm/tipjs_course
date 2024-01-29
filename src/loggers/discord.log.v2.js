@@ -1,8 +1,8 @@
-'use strict'
+// 'use strict'
 
 const { Client, GatewayIntentBits } = require('discord.js')
 const token =
-  'MTE5NzgyNzU4NDI2MDU3NTMxNQ.Gp4-ag.fLlGlG8LBl6iYiKzT5OmBycycIHR2BGHdrV-GM'
+  'MTE5NzgyNzU4NDI2MDU3NTMxNQ.Gj_y6Z.i7ODqgBtRKLe_8P_FqGNe4r43Zs_KXK6ipFcFw'
 
 const chanelID = '1197831102413422625'
 class LoggerService {
@@ -59,7 +59,7 @@ class LoggerService {
     channel.send(message).catch((e) => console.error(e))
   }
   stopBot = async () => {
-    this.client.destroy() // Đóng kết nối với Discord
+    await this.client.destroy() // Đóng kết nối với Discord
     console.log('discord bot stop')
     process.exit()
   }

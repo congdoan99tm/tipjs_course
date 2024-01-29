@@ -5,10 +5,10 @@ const { default: helmet } = require('helmet')
 const route = require('./routes/index')
 const morgan = require('morgan')
 const compression = require('compression')
-const client = require('./loggers/discord.log')
+// const client = require('./loggers/discord.log.v2')
 // init middleWare
 
-client
+// client
 app.use(morgan('dev')) // log request
 app.use(helmet()) // bảo mật, chặn xem framework từ curl ... -include
 app.use(compression()) // giảm tải băng thông response.
@@ -18,13 +18,19 @@ app.use(
     extended: true,
   })
 )
+// test pub sub redis
+//
+require('./tests/inventory.test')
+const productTest = require('./tests/product.test')
+productTest.purchaseProduct('product:001', 10)
+
 // init DB
 require('./dbs/init.mongodb')
 // const { checkOverloadDB } = require("./helpers/check.connect");
 // checkOverloadDB();
 // init routes
 // route(app);
-app.use('/', require('./routes/index'))
+app.use('/', require('./routes'))
 
 // handle error
 app.use((req, res, next) => {
