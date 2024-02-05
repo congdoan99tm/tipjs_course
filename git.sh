@@ -1,11 +1,11 @@
 # chmod +x git.sh
 #!/bin/bash -x
 YELLOW='\033[1;33m'
-GREEN='\033[0;32m'
 CYAN='\033[0;36m'
 RED='\033[0;31m'
 NC='\033[0m'
-COMMIT='fix close server; add redis pub-sub test'
+
+COMMIT='add - get comments'
 
 echo "${YELLOW}Pushing... ${NC}"
 

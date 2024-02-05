@@ -36,8 +36,14 @@ const Ioredis = require('ioredis')
 
 class RedisPubSubService {
   constructor() {
-    this.subscriber = new Ioredis()
-    this.publisher = new Ioredis()
+    this.subscriber = new Ioredis.Redis({
+      host: '127.0.0.1',
+      port: 6380,
+    })
+    this.publisher = new Ioredis.Redis({
+      host: '127.0.0.1',
+      port: 6380,
+    })
 
     this.subscriber.on('connect', () => {
       console.log('Connected to Redis')
@@ -60,7 +66,7 @@ class RedisPubSubService {
     this.subscriber.subscribe(channel)
     this.subscriber.on('message', (subscriberChannel, message) => {
       if (channel === subscriberChannel) {
-        callback(subscriberChannel,message)
+        callback(subscriberChannel, message)
       }
     })
   }

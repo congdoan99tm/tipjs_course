@@ -2,8 +2,7 @@
 
 const { Client, GatewayIntentBits } = require('discord.js')
 const token =
-  'MTE5NzgyNzU4NDI2MDU3NTMxNQ.Gj_y6Z.i7ODqgBtRKLe_8P_FqGNe4r43Zs_KXK6ipFcFw'
-
+  'MTE5NzgyNzU4NDI2MDU3NTMxNQ.GS1mDJ.dIMbkV4JD5VpOJX2mfMJ2OWLywbgmQ6Zc8cawY'
 const chanelID = '1197831102413422625'
 class LoggerService {
   constructor() {
