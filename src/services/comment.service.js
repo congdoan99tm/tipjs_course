@@ -58,7 +58,7 @@ class CommentService {
         { sort: { comment_right: -1 } }
       )
       if (maxRightValue) {
-        rightValue = maxRightValue.right + 1
+        rightValue = maxRightValue.comment_right + 1
       } else {
         rightValue = 1
       }
