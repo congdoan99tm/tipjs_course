@@ -5,7 +5,7 @@ CYAN='\033[0;36m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-COMMIT='add - get comments'
+COMMIT='noti: model-service'
 
 echo "${YELLOW}Pushing... ${NC}"
 
