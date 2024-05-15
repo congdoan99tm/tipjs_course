@@ -21,6 +21,9 @@ const {
 const { removeUndefinedObject, updateNestedObjectParser } = require('../utils');
 const { insertInventory } = require('../models/repositories/inventory.repo');
 const { pushNotiToSystem } = require('./notification.service');
+const shopModel = require('../models/shop.model');
+const { convertToObjectIdMongodb } = require('../utils/index');
+
 // define Factory class to create product
 class ProductFactory {
   static productRegistry = {}; // key-class
@@ -132,18 +135,23 @@ class Product {
         shopId: this.product_shop,
         stock: this.product_quantity,
       });
-      // push noti to system collection
-      pushNotiToSystem({
-        type: 'SHOP-001',
-        receivedId: 1,
-        senderId: this.product_shop,
-        options: {
-          product_name: this.product_name,
-          shop_name: this.product_shop,
-        },
-      })
-        .then((rs) => console.log(rs))
-        .catch(console.error);
+      // push Notify to list Notify
+      const shopFound = await shopModel
+        .findById(convertToObjectIdMongodb(this.product_shop))
+        .lean();
+      if (shopFound) {
+        pushNotiToSystem({
+          type: 'SHOP-001',
+          receivedId: 1,
+          senderId: this.product_shop,
+          options: {
+            product_name: this.product_name,
+            shop_name: shopFound.name,
+          },
+        })
+          .then((rs) => console.log(rs))
+          .catch(console.error);
+      }
     }
     return newProduct;
   }

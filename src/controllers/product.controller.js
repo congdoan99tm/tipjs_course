@@ -5,6 +5,7 @@ const asyncHandler = require('../helpers/asyncHandler');
 const ProductService = require('../services/product.service');
 const ProductServiceV2 = require('../services/product.service.xxx');
 
+
 class ProductController {
   createProduct = async (req, res, next) => {
     new SuccessResponse({
@@ -14,15 +15,21 @@ class ProductController {
         product_shop: req.user.userId,
       }),
     }).send(res);
+
+
   };
 
   updateProduct = async (req, res, next) => {
     new SuccessResponse({
       message: 'Update Product Success!',
-      metadata: await ProductServiceV2.updateProduct(req.body.product_type,req.params.productId, {
-        ...req.body,
-        product_shop: req.user.userId,
-      }),
+      metadata: await ProductServiceV2.updateProduct(
+        req.body.product_type,
+        req.params.productId,
+        {
+          ...req.body,
+          product_shop: req.user.userId,
+        }
+      ),
     }).send(res);
   };
 
