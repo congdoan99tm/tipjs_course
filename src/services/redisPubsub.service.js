@@ -32,44 +32,44 @@
 
 // module.exports = new RedisPubSubService()
 
-const Ioredis = require('ioredis')
+const Ioredis = require('ioredis');
 
 class RedisPubSubService {
   constructor() {
     this.subscriber = new Ioredis.Redis({
       host: '127.0.0.1',
-      port: 6380,
-    })
+      port: 6379,
+    });
     this.publisher = new Ioredis.Redis({
       host: '127.0.0.1',
-      port: 6380,
-    })
+      port: 6379,
+    });
 
     this.subscriber.on('connect', () => {
-      console.log('Connected to Redis')
-    })
+      console.log('Connected to Redis');
+    });
   }
 
   publish(channel, message) {
     return new Promise((resolve, reject) => {
       this.publisher.publish(channel, message, (err, reply) => {
         if (err) {
-          reject(err)
+          reject(err);
         } else {
-          resolve(reply)
+          resolve(reply);
         }
-      })
-    })
+      });
+    });
   }
 
   subscribe(channel, callback) {
-    this.subscriber.subscribe(channel)
+    this.subscriber.subscribe(channel);
     this.subscriber.on('message', (subscriberChannel, message) => {
       if (channel === subscriberChannel) {
-        callback(subscriberChannel, message)
+        callback(subscriberChannel, message);
       }
-    })
+    });
   }
 }
 
-module.exports = new RedisPubSubService()
+module.exports = new RedisPubSubService();

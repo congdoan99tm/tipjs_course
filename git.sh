@@ -5,7 +5,7 @@ CYAN='\033[0;36m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-COMMIT='noti: create noti when create product'
+COMMIT='fix setup ts'
 
 echo "${YELLOW}Pushing... ${NC}"
 
