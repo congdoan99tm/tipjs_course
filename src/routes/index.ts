@@ -26,4 +26,4 @@ router.use('/v1/api/notification', require('./notification'));
 
 router.use('/v1/api', require('./access'));
 
-module.exports = router;
+export default router;

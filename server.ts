@@ -1,12 +1,14 @@
-const app = require('./src/app');
+import app from './src/app';
 const port = process.env.DEV_APP_PORT || 3052;
+import mongoose from 'mongoose';
+
 // const discordBot = require('./src/loggers/discord.log.v2')
 
 const server = app.listen(port, () => {
   console.log('app run on port:', port);
 });
 
-let isExiting : boolean = false;
+let isExiting: boolean = false;
 
 process.on('SIGINT', async () => {
   if (isExiting) {
@@ -14,8 +16,6 @@ process.on('SIGINT', async () => {
   }
 
   isExiting = true;
-
-  const mongoose = require('mongoose');
 
   server.close(async () => {
     console.log(`app exit on port: ${port}`);

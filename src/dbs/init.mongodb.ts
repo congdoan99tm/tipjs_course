@@ -1,23 +1,27 @@
-"use strict";
+'use strict';
 
-const mongoose = require("mongoose");
-const {
-  db: { host, name, port },
-  app,
-} = require("../configs/config.mongodb");
+import mongoose from 'mongoose';
+import * as config from '../configs/config.mongodb';
+console.log(config);
+
+const host = config.default.db.host;
+const port = config.default.db.port;
+const name = config.default.db.name;
+
 const connectString = `mongodb://${host}:${port}/${name}`;
-const { countConnect } = require("../helpers/check.connect");
+const { countConnect } = require('../helpers/check.connect');
 
 class Database {
+  static instance: any;
   constructor() {
     this.connect();
   }
   // connect
-  connect(type = "mongodb") {
+  connect(type = 'mongodb') {
     // Dev
     if (1 === 1) {
-      mongoose.set("debug", true);
-      mongoose.set("debug", { color: true });
+      mongoose.set('debug', true);
+      mongoose.set('debug', { color: true });
     }
 
     mongoose
@@ -38,7 +42,7 @@ class Database {
 
 const instanceMongodb = Database.getInstance();
 
-module.exports = instanceMongodb;
+export default instanceMongodb;
 
 /* Dùng cách lv0 cũng tương tự, vì required trong nodejs
  sẽ cache và chỉ có 1 đối tượng mongo duy nhất được tạo.
