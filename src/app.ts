@@ -25,6 +25,7 @@ app.use(
 );
 // test pub sub redis
 // require('./tests/inventory.test');
+
 inventoryTest;
 productTest.purchaseProduct('product:001', 10);
 
