@@ -1,7 +1,9 @@
 import redisPubsubService from '../services/redisPubsub.service';
 
 class InventoryServiceTest {
-  constructor() {
+  constructor() {}
+
+  static subscribe() {
     redisPubsubService.subscribe(
       'purchase_events',
       (channel: string, message: any) => {
@@ -12,10 +14,9 @@ class InventoryServiceTest {
       }
     );
   }
-
   static updateInventory(productId: string, quantity: number) {
     console.log(`Updated inventory ${productId} with quantity ${quantity}`);
   }
 }
 
-export default new InventoryServiceTest();
+export default InventoryServiceTest;

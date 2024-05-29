@@ -1,38 +1,51 @@
 'use strict';
 
-import mongoose from 'mongoose';
+import mongoose, { ConnectOptions } from 'mongoose';
 import * as config from '../configs/config.mongodb';
-console.log(config);
+import { countConnect } from '../helpers/check.connect';
 
-const host = config.default.db.host;
-const port = config.default.db.port;
-const name = config.default.db.name;
+interface Config {
+  default: {
+    db: {
+      host: string;
+      port: number;
+      name: string;
+    };
+  };
+}
 
-const connectString = `mongodb://${host}:${port}/${name}`;
-const { countConnect } = require('../helpers/check.connect');
+const host: string = (config as Config).default.db.host;
+const port: number = (config as Config).default.db.port;
+const name: string = (config as Config).default.db.name;
+
+const connectString: string = `mongodb://${host}:${port}/${name}`;
 
 class Database {
-  static instance: any;
-  constructor() {
-    this.connect();
-  }
-  // connect
-  connect(type = 'mongodb') {
+  private static instance: Database;
+
+  private constructor() {}
+
+  public connect(type: string = 'mongodb'): Promise<void> {
     // Dev
-    if (1 === 1) {
+    if (process.env.NODE_ENV !== 'production') {
       mongoose.set('debug', true);
       mongoose.set('debug', { color: true });
     }
 
-    mongoose
-      .connect(connectString, { maxPoolSize: 5 })
-      .then((_) => {
+    const options: ConnectOptions = { maxPoolSize: 5 };
+
+    return mongoose
+      .connect(connectString, options)
+      .then(() => {
         console.log(`Connected Mongoose Success:`, countConnect());
       })
-      .catch((err) => console.log(`Error connect Mongoose: ${err}`));
+      .catch((err: Error) => {
+        console.log(`Error connect Mongoose: ${err}`);
+        throw err;
+      });
   }
 
-  static getInstance() {
+  public static getInstance(): Database {
     if (!Database.instance) {
       Database.instance = new Database();
     }
@@ -43,9 +56,3 @@ class Database {
 const instanceMongodb = Database.getInstance();
 
 export default instanceMongodb;
-
-/* Dùng cách lv0 cũng tương tự, vì required trong nodejs
- sẽ cache và chỉ có 1 đối tượng mongo duy nhất được tạo.
- Nhưng tạo singleton như trên để tạo thói quen khi sử dụng
- java hay framework khác.
- */

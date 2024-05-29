@@ -4,12 +4,13 @@ require('dotenv').config();
 import express, { Application } from 'express';
 const app: Application = express();
 import helmet from 'helmet';
-import route from './routes/index';
+import router from './routes/index';
 import morgan from 'morgan';
 import compression from 'compression';
-import instanceMongodb from './dbs/init.mongodb';
 import productTest from './tests/product.test';
+import instanceMongodb from './dbs/init.mongodb';
 import inventoryTest from './tests/inventory.test';
+
 // import client  from './loggers/discord.log.v2'
 // init middleWare
 
@@ -18,25 +19,21 @@ app.use(morgan('dev')); // log request
 app.use(helmet()); // bảo mật, chặn xem framework từ curl ... -include
 app.use(compression()); // giảm tải băng thông response.
 app.use(express.json());
-app.use(
-  express.urlencoded({
-    extended: true,
-  })
-);
+app.use(express.urlencoded({ extended: true }));
+
 // test pub sub redis
 // require('./tests/inventory.test');
-
-inventoryTest;
+inventoryTest.subscribe();
 productTest.purchaseProduct('product:001', 10);
 
 // init DB
 // require('./dbs/init.mongodb');
-instanceMongodb;
+instanceMongodb.connect();
 // const { checkOverloadDB } = require("./helpers/check.connect");
 // checkOverloadDB();
 // init routes
 // route(app);
-app.use('/', route);
+app.use('/', router);
 
 // handle error
 app.use((req, res, next) => {

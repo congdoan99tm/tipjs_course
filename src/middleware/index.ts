@@ -1,6 +1,4 @@
-'use strict'
-
-const Logger = require('../loggers/discord.log.v2')
+import Logger from '../loggers/discord.log.v2';
 
 const pushToLogDiscord = async (req, res, next) => {
   try {
@@ -8,15 +6,13 @@ const pushToLogDiscord = async (req, res, next) => {
       title: `method: ${req.method}`,
       code: req.method === 'GET' ? req.query : req.body,
       message: `${req.get('host')}${req.originUrl}`,
-    })
-    console.log('send')
-    return next()
+    });
+    console.log('send');
+    return next();
   } catch (error) {
-    console.error(error)
-    next(error)
+    console.error(error);
+    next(error);
   }
-}
+};
 
-module.exports = {
-  pushToLogDiscord,
-}
+export default pushToLogDiscord;
