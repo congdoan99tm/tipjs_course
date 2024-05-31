@@ -1,4 +1,4 @@
-const { Kafka, logLevel } = require('kafkajs');
+import { Kafka, logLevel } from 'kafkajs';
 
 const kafka = new Kafka({
   clientId: 'my-app',

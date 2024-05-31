@@ -1,4 +1,4 @@
-const amqp = require('amqplib');
+import amqp from 'amqplib';
 const message = 'hello, RabbitMQ for Tipjs';
 
 const runConsumer = async () => {
@@ -24,4 +24,4 @@ const runConsumer = async () => {
   }
 };
 
-runConsumer().catch(console.error());
+runConsumer().catch(console.error);
