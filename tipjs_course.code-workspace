@@ -6,5 +6,8 @@
     {
       "path": "../sys_message_queue_shopDEV"
     }
-  ]
+  ],
+  "settings": {
+    "cSpell.words": ["testdb"]
+  }
 }
