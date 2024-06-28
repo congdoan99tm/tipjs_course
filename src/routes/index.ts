@@ -1,6 +1,7 @@
 const express = require('express');
 const { apiKey, permission } = require('../auth/checkAuth');
 const router = express.Router();
+import upload from './upload';
 
 // import { pushToLogDiscord }  from '../middleware/index'
 // add log to discord
@@ -19,6 +20,7 @@ router.use('/v1/api/inventory', require('./inventory'));
 router.use('/v1/api/cart', require('./cart'));
 
 router.use('/v1/api/product', require('./product'));
+router.use('/v1/api/upload', upload);
 
 router.use('/v1/api/comment', require('./comment'));
 
