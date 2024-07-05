@@ -1,6 +1,29 @@
 // 1. Upload from url image
 
 import cloudinary from '../configs/cloudinary.config';
+import { s3, PutObjectCommand } from '../configs/s3.config';
+
+const uploadImageFromLocalS3 = async ({ file }) => {
+  try {
+    const command = new PutObjectCommand({
+      Bucket:process.env.AWS_BUCKET_NAME,
+      Key: file.originalname ||'unknown',
+      Body: file.buffer,
+      ContentType:'image/jpeg'
+    });
+    return {
+      image_url: result.secure_url,
+      shopId: 8409,
+      thumb_url: await cloudinary.url(result.public_id, {
+        height: 100,
+        width: 100,
+        format: 'jpg',
+      }),
+    };
+  } catch (error) {
+    console.error(`Error uploading image use S3Client:: ${error}`);
+  }
+};
 
 const uploadImageFromUrl = async () => {
   try {
@@ -37,4 +60,4 @@ const uploadImageFromLocal = async ({ path, folderName = 'product/8409' }) => {
   }
 };
 
-export { uploadImageFromUrl, uploadImageFromLocal };
+export { uploadImageFromUrl, uploadImageFromLocal, uploadImageFromLocalS3 };
