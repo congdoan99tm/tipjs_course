@@ -6,15 +6,16 @@ import { s3, PutObjectCommand } from '../configs/s3.config';
 const uploadImageFromLocalS3 = async ({ file }) => {
   try {
     const command = new PutObjectCommand({
-      Bucket:process.env.AWS_BUCKET_NAME,
-      Key: file.originalname ||'unknown',
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: file.originalname || 'unknown',
       Body: file.buffer,
-      ContentType:'image/jpeg'
+      ContentType: 'image/jpeg',
     });
+    const result = await s3.send(command);
     return {
-      image_url: result.secure_url,
+      image_url: result['secure_url'],
       shopId: 8409,
-      thumb_url: await cloudinary.url(result.public_id, {
+      thumb_url: await cloudinary.url(result['public_id'], {
         height: 100,
         width: 100,
         format: 'jpg',
@@ -59,5 +60,37 @@ const uploadImageFromLocal = async ({ path, folderName = 'product/8409' }) => {
     console.error(`Error uploading image:: ${error}`);
   }
 };
+const uploadMultiImageFromLocal = async ({
+  files,
+  folderName = 'product/8409',
+}) => {
+  try {
+    console.log(`files::`, files, folderName);
+    if (!files.length) return;
+    const uploadUrls = [];
+    for (const file of files) {
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: folderName,
+      });
+      uploadUrls.push({
+        image_url: result.secure_url,
+        shopId: 8409,
+        thumb_url: await cloudinary.url(result.public_id, {
+          height: 100,
+          width: 100,
+          format: 'jpg',
+        }),
+      });
+    }
+    return uploadUrls;
+  } catch (error) {
+    console.error(`Error uploading image:: ${error}`);
+  }
+};
 
-export { uploadImageFromUrl, uploadImageFromLocal, uploadImageFromLocalS3 };
+export {
+  uploadImageFromUrl,
+  uploadImageFromLocal,
+  uploadMultiImageFromLocal,
+  uploadImageFromLocalS3,
+};
