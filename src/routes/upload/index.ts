@@ -15,7 +15,7 @@ router.post(
 );
 router.post(
   '/product/multiple',
-  uploadDisk.array('file'),
+  uploadDisk.array('files'),
   asyncHandler(uploadController.uploadMultiFile)
 );
 router.post(
