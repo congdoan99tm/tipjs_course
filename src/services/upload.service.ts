@@ -10,6 +10,7 @@ import {
 import crypto from 'crypto';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 const randomImageName = () => crypto.randomBytes(16).toString('hex');
+const urlImagePublic = 'https://d2my2g1tccak51.cloudfront.net';
 
 const uploadImageFromLocalS3 = async ({ file }) => {
   try {
@@ -28,7 +29,7 @@ const uploadImageFromLocalS3 = async ({ file }) => {
     });
     const url = await getSignedUrl(s3, signedUrl, { expiresIn: 3600 });
 
-    const url2 = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${command.input.Key}`;
+    const url2 = `${urlImagePublic}/${command.input.Key}`;
 
     const result = await s3.send(command);
     return {
