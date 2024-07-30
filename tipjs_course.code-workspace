@@ -5,9 +5,21 @@
     },
     {
       "path": "../sys_message_queue_shopDEV"
+    },
+    {
+      "path": "../shopdev-backend-ci-cd"
     }
   ],
   "settings": {
-    "cSpell.words": ["testdb", "wiilhf"]
+    "cSpell.words": [
+      "certbot",
+      "chimxinh",
+      "INNODB",
+      "salf",
+      "shopdev",
+      "testdb",
+      "usro",
+      "wiilhf"
+    ]
   }
 }

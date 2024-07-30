@@ -1,6 +1,6 @@
 import CustomError from './core/custom.error';
-
-require('dotenv').config();
+import env from 'dotenv';
+env.config();
 import express, { Application } from 'express';
 const app: Application = express();
 import helmet from 'helmet';

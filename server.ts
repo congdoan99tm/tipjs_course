@@ -1,8 +1,11 @@
 import app from './src/app';
-const port = process.env.DEV_APP_PORT || 3052;
 import mongoose from 'mongoose';
+// import os from 'os';
+const port = process.env.DEV_APP_PORT || 3052;
 
 // const discordBot = require('./src/loggers/discord.log.v2')
+// thiết lập số core chạy dựa trên cấu hình máy tính
+// process.env.UV_THREADPOOL_SIZE = (os.cpus().length -1).toString();
 
 const server = app.listen(port, () => {
   console.log('app run on port:', port);
