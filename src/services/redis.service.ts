@@ -1,8 +1,9 @@
-const Ioredis = require('ioredis');
-const { promisify } = require('util');
-const { reservationInventory } = require('../models/repositories/inventory.repo');
+import Ioredis from 'ioredis';
+import { promisify } from 'util';
+import InventoryRepo from '../models/repositories/inventory.repo';
+import inventoryRepo from '../models/repositories/inventory.repo';
 
-const redisClient = new Ioredis.Redis({
+const redisClient = new Ioredis({
   host: '127.0.0.1',
   port: 6379,
 });
@@ -21,8 +22,8 @@ const acquireLock = async (product_id, quantity, cartId) => {
     const result = await setNXAsync(key, '');
     if (result === 1) {
       // thao tác với inventory
-      const isReservation = await reservationInventory({
-        product_id,
+      const isReservation = await inventoryRepo.reservationInventory({
+        productId: product_id,
         quantity,
         cartId,
       });
@@ -42,7 +43,7 @@ const releaseLock = async (keyLock) => {
   return await delAsyncKey(keyLock);
 };
 
-module.exports = {
+export default {
   acquireLock,
   releaseLock,
 };

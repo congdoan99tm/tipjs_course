@@ -32,15 +32,17 @@
 
 // module.exports = new RedisPubSubService()
 
-const Ioredis = require('ioredis');
+import Ioredis from 'ioredis';
 
 class RedisPubSubService {
+  subscriber: Ioredis;
+  publisher: Ioredis;
   constructor() {
-    this.subscriber = new Ioredis.Redis({
+    this.subscriber = new Ioredis({
       host: '127.0.0.1',
       port: 6379,
     });
-    this.publisher = new Ioredis.Redis({
+    this.publisher = new Ioredis({
       host: '127.0.0.1',
       port: 6379,
     });
@@ -72,4 +74,4 @@ class RedisPubSubService {
   }
 }
 
-module.exports = new RedisPubSubService();
+export default new RedisPubSubService();

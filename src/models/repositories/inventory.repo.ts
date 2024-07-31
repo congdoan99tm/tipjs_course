@@ -31,4 +31,4 @@ const reservationInventory = async ({ productId, quantity, cartId }) => {
     options = { upsert: true, new: true };
   return await inventory.updateOne(query, updateSet);
 };
-module.exports = { insertInventory, reservationInventory };
+export default { insertInventory, reservationInventory };
