@@ -1,5 +1,3 @@
-'use strict';
-
 const Ioredis = require('ioredis');
 const { promisify } = require('util');
 const { reservationInventory } = require('../models/repositories/inventory.repo');

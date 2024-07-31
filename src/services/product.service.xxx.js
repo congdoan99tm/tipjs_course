@@ -1,11 +1,4 @@
-'use strict';
-
-const {
-  product,
-  clothing,
-  electronic,
-  furniture,
-} = require('../models/product.model');
+const { product, clothing, electronic, furniture } = require('../models/product.model');
 const { BadRequestError } = require('../core/error.response');
 const {
   queryProduct,
@@ -21,7 +14,7 @@ const {
 const { removeUndefinedObject, updateNestedObjectParser } = require('../utils');
 const { insertInventory } = require('../models/repositories/inventory.repo');
 const { pushNotiToSystem } = require('./notification.service');
-const shopModel = require('../models/shop.model');
+import shopModel from('../models/shop.model');
 const { convertToObjectIdMongodb } = require('../utils/index');
 
 // define Factory class to create product

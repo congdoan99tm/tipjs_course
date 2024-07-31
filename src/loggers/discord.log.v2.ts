@@ -1,7 +1,7 @@
-// 'use strict'
+//
 
 import { Client, GatewayIntentBits } from 'discord.js';
-const token: string =process.env.TOKEN_DISCORD;
+const token: string = process.env.TOKEN_DISCORD;
 const chanelID: string = process.env.CHANNEL_ID_DISCORD;
 class LoggerService {
   client: any;

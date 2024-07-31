@@ -1,5 +1,3 @@
-'use strict';
-
 import mongoose, { ConnectOptions } from 'mongoose';
 import * as config from '../configs/config.mongodb';
 import { countConnect } from '../helpers/check.connect';

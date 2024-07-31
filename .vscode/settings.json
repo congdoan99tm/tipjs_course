@@ -1,3 +1,14 @@
 {
-  "cSpell.words": ["chặn", "Noti", "pexpire", "setnx"]
+  "cSpell.words": [
+    "accesscontrol",
+    "apikey",
+    "chặn",
+    "cloudinary",
+    "dspimljn",
+    "Noti",
+    "pexpire",
+    "REFRESHTOKEN",
+    "rtoken",
+    "setnx"
+  ]
 }
