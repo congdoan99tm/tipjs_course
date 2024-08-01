@@ -2,12 +2,6 @@
   "folders": [
     {
       "path": "."
-    },
-    {
-      "path": "../sys_message_queue_shopDEV"
-    },
-    {
-      "path": "../shopdev-backend-ci-cd"
     }
   ],
   "settings": {
