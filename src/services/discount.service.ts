@@ -1,7 +1,7 @@
 import { BadRequestError, NotFoundError } from '../core/error.response';
 import discount from '../models/discount.model';
 import { convertToObjectIdMongodb, removeUndefinedObject } from '../utils';
-import { findAllProducts } from './product.service.xxx';
+import ProductService from './product.service.xxx';
 import {
   checkDiscountExist,
   findAllDiscountCodesUnselect,
@@ -75,7 +75,8 @@ class DiscountService {
     return newDiscount;
   }
   static async updateDiscountCode(id, body) {
-    if (!body.code || !body.shopId) throw new BadRequestError('Invalid code or shopId');
+    if (!body.code || !body.shopId)
+      throw new BadRequestError('Invalid code or shopId');
 
     const foundDiscount = await checkDiscountExist({
       code: body.code,
@@ -92,7 +93,13 @@ class DiscountService {
     return newDiscount;
   }
 
-  static async getAllDiscountCodesWithProduct({ code, shopId, userId, limit, page }) {
+  static async getAllDiscountCodesWithProduct({
+    code,
+    shopId,
+    userId,
+    limit,
+    page,
+  }) {
     const foundDiscount = await checkDiscountExist({
       code,
       shopId,
@@ -105,7 +112,7 @@ class DiscountService {
     let product;
     if (discount_applies_to === 'all') {
       // get all product
-      product = await findAllProducts({
+      product = await ProductService.findAllProducts({
         filter: {
           product_shop: convertToObjectIdMongodb(shopId),
           isPublished: true,
@@ -118,7 +125,7 @@ class DiscountService {
     }
     if (discount_applies_to === 'specific') {
       // get the product ids
-      product = await findAllProducts({
+      product = await ProductService.findAllProducts({
         filter: {
           _id: { $in: discount_product_ids },
           isPublished: true,

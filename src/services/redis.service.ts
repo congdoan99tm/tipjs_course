@@ -12,8 +12,8 @@ const pExpire = promisify(redisClient.pexpire).bind(redisClient);
 const setNXAsync = promisify(redisClient.setnx).bind(redisClient);
 const delAsyncKey = promisify(redisClient.del).bind(redisClient);
 
-const acquireLock = async (product_id, quantity, cartId) => {
-  const key = `lock_v2023_${product_id}`;
+const acquireLock = async ({ productId, quantity, cartId }) => {
+  const key = `lock_v2023_${productId}`;
   const retryTimes = 10;
   const expireTime = 3; // 3 seconds tam lock
 
@@ -23,7 +23,7 @@ const acquireLock = async (product_id, quantity, cartId) => {
     if (result === 1) {
       // thao tác với inventory
       const isReservation = await inventoryRepo.reservationInventory({
-        productId: product_id,
+        productId,
         quantity,
         cartId,
       });

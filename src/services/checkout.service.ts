@@ -2,7 +2,7 @@ import { BadRequestError } from '../core/error.response';
 import findCartById from '../models/repositories/cart.repo';
 import { checkProductByServer } from '../models/repositories/product.repo';
 import discountService from './discount.service';
-import { acquireLock, releaseLock } from './redis.service';
+import RedisService from './redis.service';
 import order from '../models/order.model';
 
 class CheckoutService {
@@ -56,7 +56,11 @@ class CheckoutService {
 
     // tính tổng tiền bill
     for (let i = 0; i < shop_order_ids.length; i++) {
-      const { shopId, shop_discounts = [], item_products = [] } = shop_order_ids[i];
+      const {
+        shopId,
+        shop_discounts = [],
+        item_products = [],
+      } = shop_order_ids[i];
       // check product available
       const checkProductServer = await checkProductByServer(item_products);
       if (!checkProductServer[0]) throw new BadRequestError('order wrong!!!');
@@ -110,13 +114,12 @@ class CheckoutService {
     user_address = {},
     user_payment = {},
   }) {
-    const { shop_order_ids_new, checkout_order } = await CheckoutService.checkoutReview(
-      {
+    const { shop_order_ids_new, checkout_order } =
+      await CheckoutService.checkoutReview({
         cartId,
         userId,
         shop_order_ids,
-      }
-    );
+      });
 
     // check lại 1 lần nữa xem vượt tồn kho hay không?
     // get new array Products
@@ -124,10 +127,14 @@ class CheckoutService {
     const acquireProduct = [];
     for (let i = 0; i < products.length; i++) {
       const { productId, quantity } = products[i];
-      const keyLock = await acquireLock({ productId, quantity, cartId });
+      const keyLock = await RedisService.acquireLock({
+        productId,
+        quantity,
+        cartId,
+      });
       acquireProduct.push(keyLock ? true : false);
       if (keyLock) {
-        await releaseLock(keyLock);
+        await RedisService.releaseLock(keyLock);
       }
     }
 

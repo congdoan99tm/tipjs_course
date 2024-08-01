@@ -10,7 +10,7 @@ class KeyTokenService {
   }: {
     userId: any;
     publicKey: string;
-    privateKey: string;
+    privateKey?: string;
     refreshToken?: string; // refreshToken là tùy chọn
   })  {
     try {

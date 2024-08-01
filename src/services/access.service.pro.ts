@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt = require('bcrypt');
 import shopModel from '../models/shop.model';
 import crypto from 'node:crypto';
 import KeyTokenService from './keyToken.service';
@@ -16,7 +16,7 @@ class AccessServicePro {
       throw new BadRequestError('Error: Shop already register');
     }
     const passwordHash = await bcrypt.hash(password, 1);
-    const RoleShop = []; 
+    const RoleShop = [];
     const newShop = await shopModel.create({
       name: name,
       email: email,
@@ -36,7 +36,7 @@ class AccessServicePro {
         },
       });
 
-      const publicKeyString = await KeyTokenService.createToken({
+      const publicKeyString = await KeyTokenService.createKeyToken({
         userId: newShop._id,
         publicKey,
       });
