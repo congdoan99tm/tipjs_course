@@ -1,4 +1,4 @@
-import { product, clothing, electronic, furniture } from '../product.model';
+import { ProductModel } from '../product.model';
 import { Types } from 'mongoose';
 import {
   getSelectData,
@@ -16,21 +16,20 @@ const findAllPublishForShop = async ({ query, limit, skip }) => {
 };
 const searchProductByUser = async ({ keySearch }) => {
   const regexSearch = new RegExp(keySearch);
-  const result = await product
-    .find(
-      {
-        isPublished: true,
-        $text: { $search: regexSearch },
-      },
-      { score: { $meta: 'textScore' } }
-    )
+  const result = await ProductModel.find(
+    {
+      isPublished: true,
+      $text: { $search: keySearch }, //regexSearch
+    },
+    { score: { $meta: 'textScore' } }
+  )
     .sort({ score: { $meta: 'textScore' } })
     .lean();
   return result;
 };
 
 const publishProductByShop = async ({ product_shop, product_id }) => {
-  const foundProduct = await product.findOne({
+  const foundProduct = await ProductModel.findOne({
     product_shop: new Types.ObjectId(product_shop),
     _id: new Types.ObjectId(product_id),
   });
@@ -44,7 +43,7 @@ const publishProductByShop = async ({ product_shop, product_id }) => {
 };
 
 const unPublishProductByShop = async ({ product_shop, product_id }) => {
-  const foundProduct = await product.findOne({
+  const foundProduct = await ProductModel.findOne({
     product_shop: new Types.ObjectId(product_shop),
     _id: new Types.ObjectId(product_id),
   });
@@ -58,9 +57,8 @@ const unPublishProductByShop = async ({ product_shop, product_id }) => {
 
 const findAllProducts = async ({ limit, sort, page, filter, select }) => {
   const skip = (page - 1) * limit;
-  const sortBy = sort === 'ctime' ? { _id: -1 } : { _id: 1 };
-  const products = await product
-    .find(filter)
+  const sortBy: any = sort === 'ctime' ? { _id: -1 } : { _id: 1 };
+  const products = await ProductModel.find(filter)
     .sort(sortBy)
     .skip(skip)
     .limit(limit)
@@ -70,7 +68,9 @@ const findAllProducts = async ({ limit, sort, page, filter, select }) => {
 };
 
 const findProduct = async ({ product_id, unSelect }) => {
-  return await product.findById(product_id).select(unGetSelectData(unSelect));
+  return await ProductModel.findById(product_id).select(
+    unGetSelectData(unSelect)
+  );
 };
 
 const updateProductById = async ({
@@ -92,8 +92,7 @@ const updateProductById = async ({
 };
 
 const queryProduct = async ({ query, limit, skip }) => {
-  return await product
-    .find(query)
+  return await ProductModel.find(query)
     .populate('product_shop', 'name email -_id')
     .sort({ updateAt: -1 })
     .skip(skip)
@@ -103,7 +102,9 @@ const queryProduct = async ({ query, limit, skip }) => {
 };
 
 const getProductById = async (productId) => {
-  return await product.findOne({ _id: convertToObjectIdMongodb(productId) }).lean();
+  return await ProductModel.findOne({
+    _id: convertToObjectIdMongodb(productId),
+  }).lean();
 };
 const checkProductByServer = async (products) => {
   return await Promise.all(

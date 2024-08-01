@@ -1,5 +1,6 @@
-const { Schema, model } = require('mongoose');
-const slugify = require('slugify');
+import { Schema, model } from 'mongoose';
+import slugify from 'slugify';
+
 const DOCUMENT_NAME = 'Product';
 const COLLECTION_NAME = 'Products';
 
@@ -80,9 +81,18 @@ const furnitureSchema = new Schema(
   }
 );
 
-module.exports = {
-  product: model(DOCUMENT_NAME, productSchema),
-  clothing: model('Clothing', clothingSchema),
-  electronic: model('Electronics', electronicSchema),
-  furniture: model('Furniture', furnitureSchema),
-};
+// module.exports = {
+//   product: model(DOCUMENT_NAME, productSchema),
+//   clothing: model('Clothing', clothingSchema),
+//   electronic: model('Electronics', electronicSchema),
+//   furniture: model('Furniture', furnitureSchema),
+// };
+
+// Create models
+const ProductModel = model(DOCUMENT_NAME, productSchema);
+const ClothingModel = model('Clothing', clothingSchema);
+const ElectronicModel = model('Electronics', electronicSchema);
+const FurnitureModel = model('Furniture', furnitureSchema);
+
+// Export models using ES6 syntax
+export { ProductModel, ClothingModel, ElectronicModel, FurnitureModel };
