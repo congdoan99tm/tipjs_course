@@ -7,9 +7,11 @@
   "settings": {
     "cSpell.words": [
       "accesscontrol",
+      "apikey",
       "certbot",
       "chimxinh",
       "INNODB",
+      "REFRESHTOKEN",
       "salf",
       "shopdev",
       "testdb",
