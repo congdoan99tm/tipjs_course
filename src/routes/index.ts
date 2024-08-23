@@ -11,10 +11,14 @@ import product from './product';
 import cmt from './comment';
 import notify from './notification';
 import access from './access';
+import apiKeyRouter from './api_key';
 // import { pushToLogDiscord }  from '../middleware/index'
 // add log to discord
 // router.use(pushToLogDiscord)
 // check api key
+
+router.use('/v1/api/api-key', apiKeyRouter);
+
 router.use(apiKey);
 // check permission
 router.use(permission('0000'));

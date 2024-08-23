@@ -1,5 +1,5 @@
 import { BadRequestError } from '../core/error.response';
-import findById from '../services/apikey.service';
+import ApiKeyService from '../services/apikey.service';
 
 const HEADER = {
   API_KEY: 'x-api-key',
@@ -13,7 +13,7 @@ const apiKey = async (req, res, next) => {
       throw new BadRequestError('Forbidden Error');
     }
     // check objKey
-    const objKey = await findById(key);
+    const objKey = await ApiKeyService.findById(key);
     if (!objKey) {
       throw new BadRequestError();
     }
