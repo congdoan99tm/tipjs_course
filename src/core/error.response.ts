@@ -22,12 +22,18 @@ class ErrorResponse extends Error {
 }
 
 class ConflictResponseError extends ErrorResponse {
-  constructor(message = ReasonStatusCode.CONFLICT, statusCode = StatusCode.CONFLICT) {
+  constructor(
+    message = ReasonStatusCode.CONFLICT,
+    statusCode = StatusCode.CONFLICT
+  ) {
     super(message, statusCode);
   }
 }
 class BadRequestError extends ErrorResponse {
-  constructor(message = ReasonStatusCode.FORBIDDEN, statusCode = StatusCode.FORBIDDEN) {
+  constructor(
+    message = ReasonStatusCode.FORBIDDEN,
+    statusCode = StatusCode.FORBIDDEN
+  ) {
     super(message, statusCode);
   }
 }
@@ -41,13 +47,19 @@ class AuthFailureError extends ErrorResponse {
 }
 
 class NotFoundError extends ErrorResponse {
-  constructor(message = ReasonStatusCode.NOTFOUND, statusCode = StatusCode.NOTFOUND) {
+  constructor(
+    message = ReasonStatusCode.NOTFOUND,
+    statusCode = StatusCode.NOTFOUND
+  ) {
     super(message, statusCode);
   }
 }
 
 class ForbiddenError extends ErrorResponse {
-  constructor(message = ReasonStatusCode.FORBIDDEN, statusCode = StatusCode.FORBIDDEN) {
+  constructor(
+    message = ReasonStatusCode.FORBIDDEN,
+    statusCode = StatusCode.FORBIDDEN
+  ) {
     super(message, statusCode);
   }
 }

@@ -51,9 +51,17 @@ const checkRequiredFields = (payload, requiredFields) => {
   const missingFields = requiredFields.filter((field) => !(field in payload));
 
   if (missingFields.length > 0) {
-    const errorMessage = `Thiếu các trường bắt buộc: ${missingFields.join(', ')}`;
+    const errorMessage = `Thiếu các trường bắt buộc: ${missingFields.join(
+      ', '
+    )}`;
     throw new BadRequestError(errorMessage);
   }
+};
+const replacePlaceholder = (template, params) => {
+  Object.keys(params).forEach((k) => {
+    const placeholder = `{{${k}}}`;
+    template = template.replace(new RegExp(placeholder, 'g'), params[k]);
+  });
 };
 
 export {
@@ -64,4 +72,5 @@ export {
   updateNestedObjectParser,
   convertToObjectIdMongodb,
   checkRequiredFields,
+  replacePlaceholder,
 };
