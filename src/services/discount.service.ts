@@ -196,7 +196,7 @@ class DiscountService {
     }
     if (discount_max_uses_per_user > 0) {
       const userUserDiscount = discount_users_used.find(
-        (user) => user.userId === userId
+        (user) => user['userId'] === userId
       );
       if (userUserDiscount) {
         // ....

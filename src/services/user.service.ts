@@ -1,8 +1,9 @@
 import CustomError from '../core/custom.error';
 import { SuccessResponse } from '../core/success.response';
 import userModel from '../models/user.model';
+import emailService from './email.service';
 
-const newUser = async (email: String = null, captcha = null) => {
+const newUserService = async ({ email = null, captcha = null }) => {
   // 1. check email exists in dbs
   const user = await userModel.findOne({ email }).lean();
 
@@ -11,8 +12,13 @@ const newUser = async (email: String = null, captcha = null) => {
     return new CustomError('Email already exists', 409);
   }
 
-  return new SuccessResponse({
+  // 3. send token via email user
+  const result = await emailService.sendEmailToken({ email });
+  console.log(result);
+
+  return {
     message: 'verify email user',
-    // metadata: { token },
-  });
+    metadata: { token: result },
+  };
 };
+export default newUserService;

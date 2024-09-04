@@ -1,16 +1,19 @@
 import mongoose, { Document, Schema } from 'mongoose';
 
-const DOCUMENT_NAME = 'opt_log';
+const DOCUMENT_NAME = 'OtpLog';
 const COLLECTION_NAME = 'otp_logs';
 
-export interface OtpDocument extends Document {
+// Định nghĩa interface cho OtpDocument
+export interface IOtpDocument extends Document {
   otp_token: string;
   otp_email: string;
-  otp_status: string;
+  otp_status: 'pending' | 'active' | 'block';
+  created: Date;
   expireAt: Date;
 }
 
-const otpSchema = new Schema<OtpDocument>(
+// Khai báo Schema với TypeScript
+const otpSchema = new Schema<IOtpDocument>(
   {
     otp_token: { type: String, required: true },
     otp_email: { type: String, required: true },
@@ -19,14 +22,20 @@ const otpSchema = new Schema<OtpDocument>(
       default: 'pending',
       enum: ['pending', 'active', 'block'],
     },
-    expireAt: { type: Date, default: Date.now, expires: 60 },
+    expireAt: {
+      type: Date,
+      default: Date.now,
+      expires: 2,
+      required: true,
+    },
   },
   {
-    timestamps: true,
+    timestamps: false,
     collection: COLLECTION_NAME,
   }
 );
 
-const otpModel = mongoose.model<OtpDocument>(DOCUMENT_NAME, otpSchema);
+// Xuất mô hình OtpLog
+const OtpLogModel = mongoose.model<IOtpDocument>(DOCUMENT_NAME, otpSchema);
 
-export default otpModel;
+export default OtpLogModel;

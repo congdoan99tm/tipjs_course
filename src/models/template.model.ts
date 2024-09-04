@@ -5,17 +5,23 @@ const COLLECTION_NAME = 'templates';
 
 const templateSchema = new Schema(
   {
-    tem_id: { type: Number, require: true },
-    tem_name: { type: String, require: true },
+    tem_id: {
+      type: Number,
+      required: true,
+      unique: true,
+      default: () => Number(Date.now().toString().slice(-5)),
+    },
+    tem_name: { type: String, required: true },
     tem_status: {
       type: String,
       default: 'active',
     },
-    tem_html: { type: String, require: true },
+    tem_html: { type: String, required: true },
   },
   {
     timestamps: true,
     collection: COLLECTION_NAME,
+    validateBeforeSave: true,
   }
 );
 export default model(DOCUMENT_NAME, templateSchema);

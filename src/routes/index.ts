@@ -13,6 +13,8 @@ import notify from './notification';
 import access from './access';
 import apiKeyRouter from './api_key';
 import file from './file';
+import email from './email';
+import user from './user';
 
 // import { pushToLogDiscord }  from '../middleware/index'
 // add log to discord
@@ -27,6 +29,8 @@ router.use(apiKey);
 router.use(permission('0000'));
 
 router.use('/v1/api/checkout', checkout);
+router.use('/v1/api/user', user);
+router.use('/v1/api/email', email);
 router.use('/v1/api/profile', profile);
 router.use('/v1/api/discount', discount);
 router.use('/v1/api/inventory', inventory);

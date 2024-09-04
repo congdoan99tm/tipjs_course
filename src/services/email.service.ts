@@ -12,7 +12,7 @@ const _sendEmailLinkVerify = ({
 }) => {
   try {
     const mailOptions = {
-      from: ' "ShopDEV" <anonystick@gmail.com>',
+      from: ' "Đoàn dz" <congdoan@dinos.vn>',
       to: toEmail,
       subject,
       text,
@@ -30,29 +30,31 @@ const _sendEmailLinkVerify = ({
   }
 };
 
-const sendEmailToken = async (email: String = null) => {
-  try {
-    // 1. generator token
-    const token = await newOtp(email);
+const sendEmailToken = async ({ email = null }) => {
+  // 1. generator token
 
-    // 2. get template
-    const template = await templateService.getTemplate('HTML EMAIL TOKEN');
-    if (!template) {
-      throw new NotFoundError('Template not found');
-    }
-    // 3. replace placeholder with params
-    const content = replacePlaceholder(template.tem_html, {
-      link_verify: `http://localhost:3052/cgp/welcome-back?token=${token}`,
-    });
-    
-    // 4. Send email
-    _sendEmailLinkVerify({
-      html: 'html',
-      toEmail: email,
-      subject: 'Vui lòng xác nhận địa chỉ email đăng ký shopDEV',
-      text: '',
-    });
-  } catch (error) {}
+  const otp = await newOtp(email);
+
+  // 2. get template
+  const template = await templateService.getTemplate('html email token');
+
+  if (!template) {
+    throw new NotFoundError('Template not found');
+  }
+  // 3. replace placeholder with params
+  const content: String = replacePlaceholder(template.tem_html, {
+    link_verify: `http://localhost:3056/cgp/welcome-back?token=${otp.otp_token}`,
+  });
+
+  // 4. Send email
+  _sendEmailLinkVerify({
+    html: content,
+    toEmail: email,
+    subject: 'Vui lòng xác nhận địa chỉ email đăng ký shopDEV',
+    text: '',
+  });
+
+  return 1;
 };
 
 export default { sendEmailToken };
