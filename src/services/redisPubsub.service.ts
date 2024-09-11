@@ -33,19 +33,23 @@
 // module.exports = new RedisPubSubService()
 
 import Ioredis from 'ioredis';
+import { getRedis } from '../dbs/init.redis';
 
 class RedisPubSubService {
   subscriber: Ioredis;
   publisher: Ioredis;
   constructor() {
-    this.subscriber = new Ioredis({
-      host: '127.0.0.1',
-      port: 6379,
-    });
-    this.publisher = new Ioredis({
-      host: '127.0.0.1',
-      port: 6379,
-    });
+    // this.subscriber = new Ioredis({
+    //   host: '127.0.0.1',
+    //   port: 6379,
+    // });
+    this.subscriber = getRedis();
+    this.publisher = getRedis();
+
+    // this.publisher = new Ioredis({
+    //   host: '127.0.0.1',
+    //   port: 6379,
+    // });
 
     this.subscriber.on('connect', () => {
       console.log('Connected to Redis');

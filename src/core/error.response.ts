@@ -1,26 +1,41 @@
 const StatusCode = {
+  OK: 200,
+  CREATED: 201,
+  NO_CONTENT: 204,
+  BAD_REQUEST: 400,
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
-  NOTFOUND: 401,
+  NOTFOUND: 404,
   CONFLICT: 409,
+  INTERNAL_SERVER_ERROR: 500,
+  SERVICE_UNAVAILABLE: 503,
+  GATEWAY_TIMEOUT: 504,
 };
 
 const ReasonStatusCode = {
-  UNAUTHORIZED: 'Invalid Request',
-  FORBIDDEN: 'Bad request error',
-  CONFLICT: 'Conflict error',
-  NOTFOUND: 'Not Found',
+  OK: 'OK',
+  CREATED: 'Resource Created',
+  NO_CONTENT: 'No Content',
+  BAD_REQUEST: 'Bad Request',
+  UNAUTHORIZED: 'Unauthorized Access',
+  FORBIDDEN: 'Access Forbidden',
+  NOTFOUND: 'Resource Not Found',
+  CONFLICT: 'Conflict Occurred',
+  INTERNAL_SERVER_ERROR: 'Internal Server Error',
+  SERVICE_UNAVAILABLE: 'Service Unavailable',
+  GATEWAY_TIMEOUT: 'Gateway Timeout',
 };
 
 class ErrorResponse extends Error {
   status: number;
 
-  constructor(message, status) {
+  constructor(message: string, status: number) {
     super(message);
     this.status = status;
   }
 }
 
+// 409 Conflict Error
 class ConflictResponseError extends ErrorResponse {
   constructor(
     message = ReasonStatusCode.CONFLICT,
@@ -29,14 +44,18 @@ class ConflictResponseError extends ErrorResponse {
     super(message, statusCode);
   }
 }
+
+// 400 Bad Request Error
 class BadRequestError extends ErrorResponse {
   constructor(
-    message = ReasonStatusCode.FORBIDDEN,
-    statusCode = StatusCode.FORBIDDEN
+    message = ReasonStatusCode.BAD_REQUEST,
+    statusCode = StatusCode.BAD_REQUEST
   ) {
     super(message, statusCode);
   }
 }
+
+// 401 Unauthorized Error
 class AuthFailureError extends ErrorResponse {
   constructor(
     message = ReasonStatusCode.UNAUTHORIZED,
@@ -46,6 +65,17 @@ class AuthFailureError extends ErrorResponse {
   }
 }
 
+// 403 Forbidden Error
+class ForbiddenError extends ErrorResponse {
+  constructor(
+    message = ReasonStatusCode.FORBIDDEN,
+    statusCode = StatusCode.FORBIDDEN
+  ) {
+    super(message, statusCode);
+  }
+}
+
+// 404 Not Found Error
 class NotFoundError extends ErrorResponse {
   constructor(
     message = ReasonStatusCode.NOTFOUND,
@@ -55,10 +85,40 @@ class NotFoundError extends ErrorResponse {
   }
 }
 
-class ForbiddenError extends ErrorResponse {
+// 500 Internal Server Error
+class InternalServerError extends ErrorResponse {
   constructor(
-    message = ReasonStatusCode.FORBIDDEN,
-    statusCode = StatusCode.FORBIDDEN
+    message = ReasonStatusCode.INTERNAL_SERVER_ERROR,
+    statusCode = StatusCode.INTERNAL_SERVER_ERROR
+  ) {
+    super(message, statusCode);
+  }
+}
+
+// 503 Service Unavailable Error
+class ServiceUnavailableError extends ErrorResponse {
+  constructor(
+    message = ReasonStatusCode.SERVICE_UNAVAILABLE,
+    statusCode = StatusCode.SERVICE_UNAVAILABLE
+  ) {
+    super(message, statusCode);
+  }
+}
+
+// 504 Gateway Timeout Error
+class GatewayTimeoutError extends ErrorResponse {
+  constructor(
+    message = ReasonStatusCode.GATEWAY_TIMEOUT,
+    statusCode = StatusCode.GATEWAY_TIMEOUT
+  ) {
+    super(message, statusCode);
+  }
+}
+
+class RedisErrorResponse extends ErrorResponse {
+  constructor(
+    message = ReasonStatusCode.INTERNAL_SERVER_ERROR,
+    statusCode = StatusCode.INTERNAL_SERVER_ERROR
   ) {
     super(message, statusCode);
   }
@@ -70,4 +130,8 @@ export {
   AuthFailureError,
   NotFoundError,
   ForbiddenError,
+  InternalServerError,
+  ServiceUnavailableError,
+  GatewayTimeoutError,
+  RedisErrorResponse,
 };

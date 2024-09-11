@@ -2,15 +2,17 @@ import Ioredis from 'ioredis';
 import { promisify } from 'util';
 import InventoryRepo from '../models/repositories/inventory.repo';
 import inventoryRepo from '../models/repositories/inventory.repo';
+import { getRedis } from '../dbs/init.redis';
 
-const redisClient = new Ioredis({
-  host: '127.0.0.1',
-  port: 6379,
-});
+// const redisClient = new Ioredis({
+//   host: '127.0.0.1',
+//   port: 6379,
+// });
+const redisClient = getRedis();
 
-const pExpire = promisify(redisClient.pexpire).bind(redisClient);
-const setNXAsync = promisify(redisClient.setnx).bind(redisClient);
-const delAsyncKey = promisify(redisClient.del).bind(redisClient);
+// const pExpire = promisify(redisClient.pexpire).bind(redisClient);
+// const setNXAsync = promisify(redisClient.setnx).bind(redisClient);
+// const delAsyncKey = promisify(redisClient.del).bind(redisClient);
 
 const acquireLock = async ({ productId, quantity, cartId }) => {
   const key = `lock_v2023_${productId}`;
@@ -19,7 +21,7 @@ const acquireLock = async ({ productId, quantity, cartId }) => {
 
   for (let i = 0; i < retryTimes; i++) {
     // tạo 1 key, ai nắm giữ được vào thanh toán
-    const result = await setNXAsync(key, '');
+    const result = await redisClient.setnx(key, '');
     if (result === 1) {
       // thao tác với inventory
       const isReservation = await inventoryRepo.reservationInventory({
@@ -29,7 +31,7 @@ const acquireLock = async ({ productId, quantity, cartId }) => {
       });
 
       if (isReservation.matchedCount) {
-        await pExpire(key, expireTime);
+        await redisClient.pexpire(key, expireTime);
         return key;
       }
       return null;
@@ -40,7 +42,7 @@ const acquireLock = async ({ productId, quantity, cartId }) => {
 };
 
 const releaseLock = async (keyLock) => {
-  return await delAsyncKey(keyLock);
+  return await redisClient.del(keyLock);
 };
 
 export default {

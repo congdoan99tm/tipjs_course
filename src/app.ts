@@ -10,6 +10,7 @@ import compression from 'compression';
 import productTest from './tests/product.test';
 import instanceMongodb from './dbs/init.mongodb';
 import inventoryTest from './tests/inventory.test';
+import { initRedis } from './dbs/init.redis';
 
 // import client  from './loggers/discord.log.v2'
 // init middleWare
@@ -29,6 +30,7 @@ productTest.purchaseProduct('product:001', 10);
 // init DB
 // require('./dbs/init.mongodb');
 instanceMongodb.connect();
+initRedis();
 // const { checkOverloadDB } = require("./helpers/check.connect");
 // checkOverloadDB();
 // init routes

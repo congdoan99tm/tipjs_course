@@ -21,7 +21,6 @@ const templateSchema = new Schema(
   {
     timestamps: true,
     collection: COLLECTION_NAME,
-    validateBeforeSave: true,
   }
 );
 export default model(DOCUMENT_NAME, templateSchema);

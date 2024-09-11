@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import { Document, Schema, model } from 'mongoose';
 
 const DOCUMENT_NAME = 'OtpLog';
 const COLLECTION_NAME = 'otp_logs';
@@ -8,7 +8,6 @@ export interface IOtpDocument extends Document {
   otp_token: string;
   otp_email: string;
   otp_status: 'pending' | 'active' | 'block';
-  created: Date;
   expireAt: Date;
 }
 
@@ -30,12 +29,12 @@ const otpSchema = new Schema<IOtpDocument>(
     },
   },
   {
-    timestamps: false,
+    timestamps: true,
     collection: COLLECTION_NAME,
   }
 );
 
 // Xuất mô hình OtpLog
-const OtpLogModel = mongoose.model<IOtpDocument>(DOCUMENT_NAME, otpSchema);
+const OtpLogModel = model<IOtpDocument>(DOCUMENT_NAME, otpSchema);
 
 export default OtpLogModel;
