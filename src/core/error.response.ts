@@ -29,7 +29,7 @@ const ReasonStatusCode = {
 class ErrorResponse extends Error {
   status: number;
 
-  constructor(message: string, status: number) {
+  constructor(message: string, status: number = 400) {
     super(message);
     this.status = status;
   }
@@ -125,6 +125,7 @@ class RedisErrorResponse extends ErrorResponse {
 }
 
 export {
+  ErrorResponse,
   ConflictResponseError,
   BadRequestError,
   AuthFailureError,
