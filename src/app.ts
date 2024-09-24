@@ -9,7 +9,6 @@ import morgan from 'morgan';
 import compression from 'compression';
 import productTest from './tests/product.test';
 import instanceMongodb from './dbs/init.mongodb';
-import inventoryTest from './tests/inventory.test';
 import { initRedis } from './dbs/init.redis';
 
 // import client  from './loggers/discord.log.v2'
@@ -23,14 +22,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // test pub sub redis
-// require('./tests/inventory.test');
+initRedis();
+import inventoryTest from './tests/inventory.test';
 inventoryTest.subscribe();
-productTest.purchaseProduct('product:001', 10);
+// productTest.purchaseProduct('product:001', 10);
 
 // init DB
 // require('./dbs/init.mongodb');
 instanceMongodb.connect();
-initRedis();
 // const { checkOverloadDB } = require("./helpers/check.connect");
 // checkOverloadDB();
 // init routes

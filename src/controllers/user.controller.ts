@@ -1,5 +1,8 @@
 import { SuccessResponse } from '../core/success.response';
-import newUserService from '../services/user.service';
+import {
+  checkLoginEmailTokenService,
+  newUserService,
+} from '../services/user.service';
 
 class UserController {
   newUser = async (req, res, next) => {
@@ -9,7 +12,13 @@ class UserController {
     new SuccessResponse(respond).send(res);
   };
 
-  checkRegisterEmailToken = async () => {};
+  checkLoginEmailToken = async (req, res, nest) => {
+    const { token = null } = req.query;
+    const respond = await checkLoginEmailTokenService({
+      token,
+    });
+    new SuccessResponse(respond).send(res);
+  };
 }
 
 export default new UserController();

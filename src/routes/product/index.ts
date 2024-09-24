@@ -16,6 +16,8 @@ router.get('/:product_id', asyncHandler(productController.findProduct));
 router.use(authenticationV2);
 
 router.post('', asyncHandler(productController.createProduct));
+router.post('/spu/new', asyncHandler(productController.createSpu));
+
 router.patch('/:productId', asyncHandler(productController.updateProduct));
 
 router.post(

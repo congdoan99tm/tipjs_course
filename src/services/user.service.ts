@@ -67,6 +67,7 @@ const checkLoginEmailTokenService = async (tokenInput) => {
       console.log(`create token success::`, tokens);
       return {
         code: 201,
+        message: 'verify successfully',
         metadata: {
           user: getInfoData({
             fields: ['usr_id', 'usr_name', 'usr_email'],

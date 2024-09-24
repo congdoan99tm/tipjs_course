@@ -43,13 +43,12 @@ class RedisPubSubService {
     //   host: '127.0.0.1',
     //   port: 6379,
     // });
-    this.subscriber = getRedis();
-    this.publisher = getRedis();
-
     // this.publisher = new Ioredis({
     //   host: '127.0.0.1',
     //   port: 6379,
     // });
+    this.subscriber = getRedis();
+    this.publisher = getRedis();
 
     this.subscriber.on('connect', () => {
       console.log('Connected to Redis');

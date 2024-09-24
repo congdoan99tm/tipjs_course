@@ -1,9 +1,22 @@
-import { SuccessResponse } from '../core/success.response'
+import { SuccessResponse } from '../core/success.response';
 // import ProductService from '../services/product.service'
-import ProductServiceV2 from '../services/product.service.xxx'
-
+import ProductServiceV2 from '../services/product.service.xxx';
+import newSpu from '../services/spu.service';
 
 class ProductController {
+  // SPU, SKU //
+  createSpu = async (req, res, next) => {
+    try {
+      const spu = await newSpu({ ...req.body, product_shop: req.user.userId });
+      new SuccessResponse({
+        message: 'Success create spu',
+        metadata: spu,
+      }).send(res);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   createProduct = async (req, res, next) => {
     new SuccessResponse({
       message: 'Create new Product Success!',
@@ -12,8 +25,6 @@ class ProductController {
         product_shop: req.user.userId,
       }),
     }).send(res);
-
-
   };
 
   updateProduct = async (req, res, next) => {

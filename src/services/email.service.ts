@@ -1,4 +1,4 @@
-import newOtp from './otp.service';
+import { newOtp } from './otp.service';
 import templateService from './template.service';
 import transport from '../dbs/init.nodemailler';
 import { NotFoundError } from '../core/error.response';
@@ -43,7 +43,7 @@ const sendEmailToken = async ({ email = null }) => {
   }
   // 3. replace placeholder with params
   const content: String = replacePlaceholder(template.tem_html, {
-    link_verify: `http://localhost:3056/cgp/welcome-back?token=${otp.otp_token}`,
+    link_verify: `http://localhost:3056/v1/api/user/welcome-back?token=${otp.otp_token}`,
   });
 
   // 4. Send email
