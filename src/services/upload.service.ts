@@ -9,9 +9,38 @@ import {
 } from '../configs/s3.config';
 import crypto from 'crypto';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import axios from 'axios';
+import FormData from 'form-data';
+import fs from 'fs';
 const randomImageName = () => crypto.randomBytes(16).toString('hex');
 const urlImagePublic = 'https://d2my2g1tccak51.cloudfront.net';
 
+const uploadImageToImgBB = async ({ file }) => {
+  try {
+    const formData = new FormData();
+    formData.append('image', fs.createReadStream(file.path), randomImageName());
+    const API_KEY = 'bfaa3f9d8ace82b989affb5321004e16';
+
+    const response = await axios({
+      method: 'post',
+      url: `https://api.imgbb.com/1/upload?key=${API_KEY}`,
+      data: formData,
+      headers: {
+        ...formData.getHeaders(),
+      },
+    });
+    const data = response.data['data'];
+
+    return {
+      image_url: data['url'],
+      shopId: 8409,
+      thumb_url: data['thumb']['url'],
+    };
+  } catch (error) {
+    console.error(`Error uploading image use imgBB:: ${error}`);
+    throw error;
+  }
+};
 const uploadImageFromLocalS3 = async ({ file }) => {
   try {
     const imageName = randomImageName();
@@ -114,4 +143,5 @@ export {
   uploadImageFromLocal,
   uploadMultiImageFromLocal,
   uploadImageFromLocalS3,
+  uploadImageToImgBB,
 };

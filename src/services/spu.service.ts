@@ -2,8 +2,8 @@ import { NotFoundError } from '../core/error.response';
 import findShopById from '../models/repositories/shop.repo';
 import SpuModel from '../models/spu.model';
 import { randomProductId } from '../utils';
-import newSku from './sku.service';
-
+import { allSkuBySpuId, newSku } from './sku.service';
+import _ from 'lodash';
 const newSpu = async ({
   product_id,
   product_name,
@@ -55,4 +55,22 @@ const newSpu = async ({
   }
 };
 
-export default newSpu;
+const oneSpu = async ({ spu_id }) => {
+  try {
+    const spu = await SpuModel.findOne({
+      product_id: spu_id,
+      isPublished: false, // true
+    });
+    if (!spu) throw new NotFoundError('spu is not found');
+    const skus = await allSkuBySpuId({ product_id: spu.product_id });
+    return {
+      spu_info: _.omit(spu, ['__v', 'updatedAt']),
+      sku_list: skus.map((sku) =>
+        _.omit(sku, ['__v', 'updatedAt', 'createdAt', 'isDeleted'])
+      ),
+    };
+  } catch (error) {
+    return {};
+  }
+};
+export { newSpu, oneSpu };

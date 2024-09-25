@@ -5,7 +5,7 @@ CYAN='\033[0;36m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-COMMIT='FEAT: create SKU-SPU'
+COMMIT='FEAT: SKU-SPU - done'
 
 echo "${YELLOW}Pushing... ${NC}"
 

@@ -14,6 +14,11 @@ router.post(
   asyncHandler(uploadController.uploadFileThumb)
 );
 router.post(
+  '/product/thumb-bb',
+  uploadDisk.single('file'),
+  asyncHandler(uploadController.uploadFileToImgBB)
+);
+router.post(
   '/product/multiple',
   uploadDisk.array('files'),
   asyncHandler(uploadController.uploadMultiFile)

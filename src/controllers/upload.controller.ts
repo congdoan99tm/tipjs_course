@@ -4,6 +4,7 @@ import {
   uploadMultiImageFromLocal,
   uploadImageFromLocalS3,
   uploadImageFromUrl,
+  uploadImageToImgBB,
 } from '../services/upload.service';
 import { BadRequestError } from '../core/error.response';
 
@@ -24,6 +25,18 @@ class UploadController {
       message: 'upload successfully uploaded',
       metadata: await uploadImageFromLocal({
         path: file.path,
+      }),
+    }).send(res);
+  };
+  uploadFileToImgBB = async (req, res, next) => {
+    const { file } = req;
+    if (!file) {
+      throw new BadRequestError('File missing');
+    }
+    new SuccessResponse({
+      message: 'upload successfully uploaded',
+      metadata: await uploadImageToImgBB({
+        file,
       }),
     }).send(res);
   };
