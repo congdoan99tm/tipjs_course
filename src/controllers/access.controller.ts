@@ -30,14 +30,20 @@ class AccessController {
     }).send(res);
   };
 
-  signUp = async (req, res, next) =>
-    new CREATED({
-      message: 'Registered OK!',
-      metadata: await AccessService.signUp(req.body),
-      options: {
-        limit: 10,
-      },
-    }).send(res);
+  signUp = async (req, res, next) => {
+    try {
+      new CREATED({
+        message: 'Registered OK!',
+        metadata: await AccessService.signUp(req.body),
+        options: {
+          limit: 10,
+        },
+      }).send(res);
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  };
 }
 
 export default new AccessController();

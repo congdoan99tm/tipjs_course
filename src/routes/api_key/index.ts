@@ -1,8 +1,8 @@
 import express from 'express';
 const router = express.Router();
 import asyncHandler from '../../helpers/asyncHandler';
-import ApiKeyController from '../../controllers/apiKey.controller';
+import apiKeyController from '../../controllers/apiKey.controller';
 
-router.post('/create', asyncHandler(ApiKeyController.create));
+router.post('/create', asyncHandler(apiKeyController.create));
 
 export default router;

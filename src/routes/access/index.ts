@@ -1,8 +1,8 @@
-import express from 'express'
-import accessController from '../../controllers/access.controller'
-const router = express.Router()
-import asyncHandler from '../../helpers/asyncHandler'
-import { authenticationV2 } from '../../auth/authUtils'
+import express from 'express';
+import accessController from '../../controllers/access.controller';
+const router = express.Router();
+import asyncHandler from '../../helpers/asyncHandler';
+import { authenticationV2 } from '../../auth/authUtils';
 
 router.post('/shop/login', asyncHandler(accessController.login));
 

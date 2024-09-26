@@ -8,10 +8,11 @@ class ApiKeyService {
     return objKey;
   };
 
-  static create = async (pass: string) => {
+  static create = async (pass: number) => {
     const apiKeyPass = process.env.API_KEY_PASS;
+
     if (pass.toString() !== apiKeyPass) {
-      throw new BadRequestError();
+      throw new BadRequestError('pass invalid');
     }
     const newKey = await apikeyModel.create({
       key: crypto.randomBytes(64).toString('hex'),
