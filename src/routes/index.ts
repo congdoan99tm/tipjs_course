@@ -21,7 +21,7 @@ import user from './user';
 // router.use(pushToLogDiscord)
 // check api key
 
-router.use('/v1/api/apikey', apiKeyRouter);
+router.use('/v1/api/api-key', apiKeyRouter);
 router.use('/my-cv', file);
 
 router.use(apiKey);

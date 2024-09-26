@@ -9,6 +9,7 @@ class ApiKeyController {
         metadata: await apikeyService.create(req.body['pass']),
       }).send(res);
     } catch (error) {
+      console.error(`create apikey ${error}`);
       throw new BadRequestError(`${error}`);
     }
   };
