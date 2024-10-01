@@ -1,3 +1,4 @@
+import { BadRequestError } from '../core/error.response';
 import { CREATED, SuccessResponse } from '../core/success.response';
 import AccessService from '../services/access.service';
 
@@ -25,6 +26,8 @@ class AccessController {
   };
 
   login = async (req, res, next) => {
+    const { email } = req.body;
+    if (!email) throw new BadRequestError(`email missing`);
     new SuccessResponse({
       metadata: await AccessService.login(req.body),
     }).send(res);

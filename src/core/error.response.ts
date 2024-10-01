@@ -1,3 +1,6 @@
+// import { logError } from '../loggers/winston.log';
+import myLog from '../loggers/mylogger.log';
+
 const StatusCode = {
   OK: 200,
   CREATED: 201,
@@ -32,6 +35,9 @@ class ErrorResponse extends Error {
   constructor(message: string, status: number = 400) {
     super(message);
     this.status = status;
+
+    // Log the error use winston
+    myLog.error(this.message, ['/path', 'a', {}]);
   }
 }
 
