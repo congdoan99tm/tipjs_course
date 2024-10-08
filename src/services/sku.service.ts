@@ -2,6 +2,11 @@ import SkuModel from '../models/sku.model';
 import SpuModel from '../models/spu.model';
 import { randomProductId } from '../utils';
 import _ from 'lodash';
+import { CACHE_PRODUCT } from '../configs/constant';
+import {
+  getCache,
+  setCacheExpiration,
+} from '../models/repositories/cache.repo';
 const newSku = async ({ spu_id, sku_list }) => {
   try {
     const convert_sku_list = sku_list.map((sku) => {
@@ -20,12 +25,16 @@ const newSku = async ({ spu_id, sku_list }) => {
 };
 const oneSku = async (sku_id, product_id) => {
   try {
-    // read cache
-    const sku = await SkuModel.findOne({ sku_id, product_id }).lean();
-    if (sku) {
-      // set cached
-    }
-    return _.omit(sku, ['__v', 'updatedAt', 'createdAt', 'isDeleted']);
+    const skuKeyCache = `${CACHE_PRODUCT.SKU(sku_id)}`;
+    const skuCache = await SkuModel.findOne({ sku_id, product_id }).lean();
+    const valueCache = skuCache ? skuCache : null;
+    setCacheExpiration({
+      key: skuKeyCache,
+      value: JSON.stringify(valueCache),
+      expirationInSeconds: 30,
+    }).then();
+    return { valueCache, toLoad: 'dbs' };
+    // return _.omit(sku, ['__v', 'updatedAt', 'createdAt', 'isDeleted']);
   } catch (error) {
     return null;
   }

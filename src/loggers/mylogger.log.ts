@@ -89,7 +89,6 @@ class MyLogger {
       },
       paramsLog
     );
-    console.log(logObject);
     this.logger.error(logObject);
   }
 }

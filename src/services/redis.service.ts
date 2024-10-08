@@ -2,19 +2,20 @@ import Ioredis from 'ioredis';
 import { promisify } from 'util';
 import InventoryRepo from '../models/repositories/inventory.repo';
 import inventoryRepo from '../models/repositories/inventory.repo';
-import { getRedis } from '../dbs/init.redis';
+import { getPublisher } from '../dbs/init.redis';
 
 // const redisClient = new Ioredis({
 //   host: '127.0.0.1',
 //   port: 6379,
 // });
-const redisClient = getRedis();
 
 // const pExpire = promisify(redisClient.pexpire).bind(redisClient);
 // const setNXAsync = promisify(redisClient.setnx).bind(redisClient);
 // const delAsyncKey = promisify(redisClient.del).bind(redisClient);
 
 const acquireLock = async ({ productId, quantity, cartId }) => {
+  const redisClient = getPublisher();
+
   const key = `lock_v2023_${productId}`;
   const retryTimes = 10;
   const expireTime = 3; // 3 seconds tam lock
@@ -42,6 +43,8 @@ const acquireLock = async ({ productId, quantity, cartId }) => {
 };
 
 const releaseLock = async (keyLock) => {
+  const redisClient = getPublisher();
+
   return await redisClient.del(keyLock);
 };
 

@@ -3,12 +3,18 @@ import productController from '../../controllers/product.controller';
 const router = express.Router();
 import asyncHandler from '../../helpers/asyncHandler';
 import { authenticationV2 } from '../../auth/authUtils';
+import { readCache, validationOneSku } from '../../middleware/cache.middleware';
 
 router.get(
   '/search/:keySearch',
   asyncHandler(productController.getListSearchProduct)
 );
-router.get('/sku/select_variation', asyncHandler(productController.findOneSku));
+router.get(
+  '/sku/select_variation',
+  validationOneSku,
+  readCache,
+  asyncHandler(productController.findOneSku)
+);
 router.get('/spu/get_spu_info', asyncHandler(productController.findOneSpu));
 
 router.get('', asyncHandler(productController.findAllProduct));

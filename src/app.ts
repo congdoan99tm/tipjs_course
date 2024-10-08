@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // test pub sub redis
-initRedis();
+initRedis({ IOREDIS_IS_ENABLE: true });
 import inventoryTest from './tests/inventory.test';
 inventoryTest.subscribe();
 // productTest.purchaseProduct('product:001', 10);
