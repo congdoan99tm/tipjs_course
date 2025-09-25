@@ -10,6 +10,7 @@ import emailService from './email.service';
 import KeyTokenService from './keyToken.service';
 import { checkEmailToken } from './otp.service';
 import bcrypt from 'bcrypt';
+
 const newUserService = async ({ email = null, captcha = null }) => {
   // 1. check email exists in dbs
   const user = await userModel.findOne({ email }).lean();
